@@ -1,4 +1,4 @@
-package com.ayman.my_store_api.entities.repositories;
+package com.ayman.my_store_api.repositories;
 
 import com.ayman.my_store_api.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.ayman.my_store_api.entities.repositories;
+package com.ayman.my_store_api.repositories;
 
 import com.ayman.my_store_api.entities.Profile;
 import org.springframework.data.repository.CrudRepository;
