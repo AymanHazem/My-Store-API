@@ -3,9 +3,9 @@ import com.ayman.my_store_api.dtos.ChangePasswordRequest;
 import com.ayman.my_store_api.dtos.RegisterUserRequest;
 import com.ayman.my_store_api.dtos.UpdateUserRequest;
 import com.ayman.my_store_api.dtos.UserDto;
-import com.ayman.my_store_api.entities.User;
 import com.ayman.my_store_api.mappers.UserMapper;
 import com.ayman.my_store_api.repositories.UserRepository;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("users")
@@ -41,8 +41,11 @@ public class UserController
         return ResponseEntity.ok(userMapper.toDto(user));
     }
     @PostMapping
-    public ResponseEntity<UserDto> addUser(@RequestBody RegisterUserRequest request, UriComponentsBuilder uriBuilder)
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterUserRequest request, UriComponentsBuilder uriBuilder)
     {
+
+        if (userRepository.existsByEmail(request.getEmail()))
+            return ResponseEntity.badRequest().body(Map.of("email","Email is Taken"));
         var user=userMapper.toEntity(request);
         userRepository.save(user);
         var userDto=userMapper.toDto(user);
@@ -82,6 +85,4 @@ public class UserController
         userRepository.save(user);
         return ResponseEntity.noContent().build();
     }
-
-
 }
