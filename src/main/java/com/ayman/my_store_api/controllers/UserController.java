@@ -5,6 +5,7 @@ import com.ayman.my_store_api.dtos.UpdateUserRequest;
 import com.ayman.my_store_api.dtos.UserDto;
 import com.ayman.my_store_api.mappers.UserMapper;
 import com.ayman.my_store_api.repositories.UserRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,7 @@ import java.util.*;
 @AllArgsConstructor
 @RestController
 @RequestMapping("users")
+@Tag(name = "Users")
 public class UserController
 {
     private final UserRepository userRepository;

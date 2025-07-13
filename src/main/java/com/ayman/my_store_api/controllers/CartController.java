@@ -6,6 +6,8 @@ import com.ayman.my_store_api.dtos.UpdateCartItemRequest;
 import com.ayman.my_store_api.exceptions.CartNotFoundException;
 import com.ayman.my_store_api.exceptions.ProductNotFoundException;
 import com.ayman.my_store_api.services.CartService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping ("carts")
 @AllArgsConstructor
+@Tag(name = "Carts")
 public class CartController
 {
     private final CartService cartService;
@@ -29,6 +32,7 @@ public class CartController
     }
 
     @PostMapping("/{cartId}/items")
+    @Operation(summary = "Adds Product to the Cart")
     public ResponseEntity<CartItemDto> addToCart(@PathVariable UUID cartId  , @RequestBody AddItemToCartRequest request)
     {
         var cartItemDto = cartService.addToCart(cartId, request.getProductId());

@@ -4,6 +4,7 @@ import com.ayman.my_store_api.entities.Product;
 import com.ayman.my_store_api.mappers.ProductMapper;
 import com.ayman.my_store_api.repositories.CategoryRepository;
 import com.ayman.my_store_api.repositories.ProductRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("products")
+@Tag(name = "Products")
 public class ProductController
 {
     private final ProductRepository productRepository;
