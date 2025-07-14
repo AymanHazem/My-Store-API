@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("auth")
 @AllArgsConstructor
@@ -25,6 +24,21 @@ public class AuthController
         var token =  jwtService.generateToken(request.getEmail());
         return ResponseEntity.ok(new JwtResponse(token));
     }
+    @PostMapping("/validate")
+    public boolean validate(@RequestHeader("Authorization") String authHeadder)
+    {
+        System.out.println("validate called");
+        var token=authHeadder.replace("Bearer ","");
+        return jwtService.validateToken(token);
+    }
+
+
+
+
+
+
+
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Void> badCredentialsHandler ()
     {
