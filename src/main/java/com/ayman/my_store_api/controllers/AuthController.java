@@ -1,6 +1,9 @@
 package com.ayman.my_store_api.controllers;
 import com.ayman.my_store_api.dtos.JwtResponse;
 import com.ayman.my_store_api.dtos.LogInRequest;
+import com.ayman.my_store_api.dtos.UserDto;
+import com.ayman.my_store_api.mappers.UserMapper;
+import com.ayman.my_store_api.repositories.UserRepository;
 import com.ayman.my_store_api.services.JwtService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -9,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("auth")
@@ -17,6 +21,8 @@ public class AuthController
 {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> logIn (@Valid @RequestBody LogInRequest request)
     {
@@ -24,6 +30,18 @@ public class AuthController
         var token =  jwtService.generateToken(request.getEmail());
         return ResponseEntity.ok(new JwtResponse(token));
     }
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> me ()
+    {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var email = (String)authentication.getPrincipal();
+        var user = userRepository.findByEmail(email).orElse(null);
+        if (user==null)
+            return ResponseEntity.notFound().build();
+        var userDto=userMapper.toDto(user);
+        return ResponseEntity.ok(userDto);
+    }
+
     @PostMapping("/validate")
     public boolean validate(@RequestHeader("Authorization") String authHeadder)
     {
