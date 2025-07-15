@@ -3,6 +3,7 @@ import com.ayman.my_store_api.dtos.ChangePasswordRequest;
 import com.ayman.my_store_api.dtos.RegisterUserRequest;
 import com.ayman.my_store_api.dtos.UpdateUserRequest;
 import com.ayman.my_store_api.dtos.UserDto;
+import com.ayman.my_store_api.entities.Role;
 import com.ayman.my_store_api.mappers.UserMapper;
 import com.ayman.my_store_api.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
-
 @AllArgsConstructor
 @RestController
 @RequestMapping("users")
@@ -26,6 +26,7 @@ public class UserController
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+
     @GetMapping
     Iterable<UserDto> findAllUsers(@RequestParam(required = false,defaultValue = "",name = "sort") String sort)
     {
@@ -36,6 +37,7 @@ public class UserController
                 .map(userMapper::toDto)
                 .toList();
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id)
     {
@@ -44,6 +46,7 @@ public class UserController
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(userMapper.toDto(user));
     }
+
     @PostMapping
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterUserRequest request, UriComponentsBuilder uriBuilder)
     {
@@ -52,11 +55,13 @@ public class UserController
             return ResponseEntity.badRequest().body(Map.of("email","Email is Taken"));
         var user=userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.USER);
         userRepository.save(user);
         var userDto=userMapper.toDto(user);
         var uri =uriBuilder.path("/users/{id}").buildAndExpand(userDto.getId()).toUri();
         return ResponseEntity.created(uri).body(userDto);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable(name = "id") Long id, @RequestBody UpdateUserRequest request)
     {
