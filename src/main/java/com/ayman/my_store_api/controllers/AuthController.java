@@ -5,6 +5,7 @@ import com.ayman.my_store_api.dtos.LogInRequest;
 import com.ayman.my_store_api.dtos.UserDto;
 import com.ayman.my_store_api.mappers.UserMapper;
 import com.ayman.my_store_api.repositories.UserRepository;
+import com.ayman.my_store_api.services.AuthService;
 import com.ayman.my_store_api.services.JwtService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("auth")
@@ -24,6 +24,7 @@ public class AuthController
 {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final AuthService authService;
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -46,9 +47,8 @@ public class AuthController
     @GetMapping("/me")
     public ResponseEntity<UserDto> me ()
     {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var userId = (Long)authentication.getPrincipal();
-        var user = userRepository.findById(userId).orElse(null);
+
+        var user = authService.getCurrentUser();
         if (user==null)
             return ResponseEntity.notFound().build();
         var userDto=userMapper.toDto(user);
