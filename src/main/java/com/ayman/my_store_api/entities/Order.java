@@ -36,4 +36,26 @@ public class Order
     @OneToMany(mappedBy = "order" , cascade = CascadeType.PERSIST)
     private Set<OrderItem> items = new LinkedHashSet<>();
 
+    public static Order fromCart (Cart cart , User user)
+    {
+        var order = new Order();
+        order.setCustomer(user);
+        order.setStatus(OrderStatus.PENDING);
+        order.setTotalPrice(cart.getTotalPrice());
+        cart.getItems()
+                .forEach(
+                        item ->
+                        {
+                            var orderItem = new OrderItem(order, item.getProduct(), item.getQuantity());
+
+                            order.items.add(orderItem);
+                        });
+        return order;
+    }
+
+    public boolean isPlacedBy (User customer)
+    {
+        return this.customer.equals(customer);
+    }
+
 }

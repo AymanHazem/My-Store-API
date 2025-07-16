@@ -1,8 +1,5 @@
 package com.ayman.my_store_api.controllers;
-import com.ayman.my_store_api.dtos.ChangePasswordRequest;
-import com.ayman.my_store_api.dtos.RegisterUserRequest;
-import com.ayman.my_store_api.dtos.UpdateUserRequest;
-import com.ayman.my_store_api.dtos.UserDto;
+import com.ayman.my_store_api.dtos.*;
 import com.ayman.my_store_api.entities.Role;
 import com.ayman.my_store_api.mappers.UserMapper;
 import com.ayman.my_store_api.repositories.UserRepository;
@@ -52,7 +49,7 @@ public class UserController
     {
 
         if (userRepository.existsByEmail(request.getEmail()))
-            return ResponseEntity.badRequest().body(Map.of("email","Email is Taken"));
+            return ResponseEntity.badRequest().body(new ErrorDto("Email is Taken"));
         var user=userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);

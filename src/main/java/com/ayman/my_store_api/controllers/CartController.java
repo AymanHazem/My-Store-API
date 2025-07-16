@@ -1,8 +1,5 @@
 package com.ayman.my_store_api.controllers;
-import com.ayman.my_store_api.dtos.AddItemToCartRequest;
-import com.ayman.my_store_api.dtos.CartDto;
-import com.ayman.my_store_api.dtos.CartItemDto;
-import com.ayman.my_store_api.dtos.UpdateCartItemRequest;
+import com.ayman.my_store_api.dtos.*;
 import com.ayman.my_store_api.exceptions.CartNotFoundException;
 import com.ayman.my_store_api.exceptions.ProductNotFoundException;
 import com.ayman.my_store_api.services.CartService;
@@ -66,14 +63,14 @@ public class CartController
     }
 
     @ExceptionHandler(CartNotFoundException.class)
-    public ResponseEntity<Map<String,String>>handelCartNotFound ()
+    public ResponseEntity<ErrorDto>handelCartNotFound ()
     {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("Error" , "Cart Not Found"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDto("Cart Not Found"));
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<Map<String,String>>handelProductNotFound ()
+    public ResponseEntity<ErrorDto>handelProductNotFound ()
     {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("Error" , "Product Not Found in the Cart"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto("Product Not Found in the Cart"));
     }
 }
