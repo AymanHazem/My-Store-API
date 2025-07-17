@@ -1,6 +1,6 @@
 package com.ayman.my_store_api.dtos;
 
-import com.ayman.my_store_api.entities.OrderStatus;
+import com.ayman.my_store_api.entities.PaymentStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import java.util.List;
 public class OrderDto
 {
     private long id;
-    private OrderStatus status;
+    private PaymentStatus status;
     private LocalDateTime createdAt;
     private List<OrderItemDto>items;
     private BigDecimal totalPrice;
