@@ -23,7 +23,8 @@ public class StripePaymentGateway implements PaymentGateway
             var builder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
                     .setCancelUrl(webSiteUrl+"/checkout-cancel")
-                    .setSuccessUrl(webSiteUrl+"/checkout-success?orderId="+order.getId());
+                    .setSuccessUrl(webSiteUrl+"/checkout-success?orderId="+order.getId())
+                    .putMetadata("order_id",order.getId().toString());
 
             order.getItems().forEach(item -> {var lineItem = createLineItem(item) ; builder.addLineItem(lineItem);});
 
