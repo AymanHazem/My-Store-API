@@ -1,11 +1,9 @@
 package com.ayman.my_store_api.auth;
 
 import com.ayman.my_store_api.common.SecurityRules;
-import com.ayman.my_store_api.users.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -29,7 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SecurityConfig
 {
-    private final UserDetailsService userDetailsService; // OUR custom will be inject not the spring one
+    private final UserDetailsService userDetailsService; // OUR custom will be injected not the spring one
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final List<SecurityRules> featureSecurityRules;
     @Bean

@@ -23,9 +23,9 @@ public class CartService
     public CartItemDto addToCart (UUID cartId , long productId)
     {
         var cart = cartRepository.getCartWithItems(cartId).orElse(null);
-        if (cart==null) throw new CartNotFoundException();//resours not found
+        if (cart==null) throw new CartNotFoundException();//resource not found
         var product = productRepository.findById(productId).orElse(null);
-        if (product==null) throw new ProductNotFoundException();//user provid bad req
+        if (product==null) throw new ProductNotFoundException();//user provide bad req
         var cartItem =  cart.addItem(product);
         cartRepository.save(cart);
         return cartMapper.toDto(cartItem);
