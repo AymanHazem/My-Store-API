@@ -20,4 +20,5 @@ public interface OrderRepository extends JpaRepository<Order, Long>
     @EntityGraph(attributePaths = "items.product")
     @Query("SELECT o from Order o WHERE o .id = :orderId")
     Optional<Order> getOrderWithItems(@Param("orderId") Long orderId);
+    Iterable<Order> findByCustomerId(Long customerId);
 }

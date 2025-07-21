@@ -38,7 +38,7 @@ public class CartService
         return cartMapper.toDto(cart);
     }
 
-    public CartItemDto updateCartItem (UUID cartId , long productId,Integer quantity)
+    public CartItemDto updateCartItem (UUID cartId , Long productId,Integer quantity)
     {
         var cart = cartRepository.getCartWithItems(cartId).orElse(null);
         if (cart==null) throw new CartNotFoundException();

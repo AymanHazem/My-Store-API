@@ -1,6 +1,7 @@
 package com.ayman.my_store_api.users;
 
 import com.ayman.my_store_api.common.ErrorDto;
+import com.ayman.my_store_api.orders.OrderRepository;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +25,7 @@ public class UserService
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final OrderRepository orderRepository;
 
 
     Iterable<UserDto> findAllUsers(String sortBy)
@@ -61,9 +64,11 @@ public class UserService
         userRepository.save(user);
         return userMapper.toDto(user);
     }
-
+    @Transactional
     public void deleteUser ( Long userId)
     {
+        var userOrders = orderRepository.findByCustomerId(userId);
+        orderRepository.deleteAll(userOrders);
         var user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
     }
@@ -73,7 +78,7 @@ public class UserService
         var user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
             throw new AccessDeniedException("Password does not match");
-        user.setPassword(request.getNewPassword());
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
 
     }

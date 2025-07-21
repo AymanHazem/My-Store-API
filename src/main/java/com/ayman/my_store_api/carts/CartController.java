@@ -3,6 +3,7 @@ import com.ayman.my_store_api.common.ErrorDto;
 import com.ayman.my_store_api.products.ProductNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class CartController
     }
 
     @PutMapping("/{cartId}/items/{productId}")
-    public CartItemDto updateCartItem(@PathVariable UUID cartId , @PathVariable long productId , @RequestBody UpdateCartItemRequest request)
+    public CartItemDto updateCartItem(@PathVariable("cartId") UUID cartId, @PathVariable("productId") Long productId, @Valid @RequestBody UpdateCartItemRequest request)
     {
         return cartService.updateCartItem(cartId,productId, request.getQuantity());
     }
