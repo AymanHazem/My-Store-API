@@ -1,0 +1,4 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+webSiteUrl: https://mysotreapi.com
