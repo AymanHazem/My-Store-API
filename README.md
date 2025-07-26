@@ -67,17 +67,6 @@ Supports inventory, orders, carts, user management, authentication, and Stripe p
 | Mapping    | MapStruct, Lombok              |
 
 ### Database Schema Overview
-
-- **Users**: id, name, email, password, role
-- **Profiles**: id (FK to users), bio, phone, DOB, loyalty points
-- **Addresses**: id, street, city, state, zip, user_id (FK)
-- **Products**: id, name, price, description, category_id (FK)
-- **Categories**: id, name
-- **Carts**: id (UUID), date_created
-- **Cart Items**: id, cart_id (FK), product_id (FK), quantity
-- **Orders**: id, customer_id (FK), status, created_at, total_price
-- **Order Items**: id, order_id (FK), product_id (FK), unit_price, quantity, total_price
-- **Wishlist**: product_id, user_id (composite PK)
 ![store_api.png](https://github.com/AymanHazem/My-Store-API/blob/main/Schema.png?raw=true)
 
 > See `src/main/resources/db/migration/` for full DDL and sample data.
